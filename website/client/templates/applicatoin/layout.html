@@ -1,0 +1,10 @@
+<template name="layout">
+  <div class="container">
+      {{> drillDownDemo}}
+      {{> header}}
+      {{> errors}}
+      <div id="main">
+          {{> yield}}
+      </div>
+  </div>
+</template>
