@@ -3,6 +3,7 @@
  */
 
 Meteor.publish('btcc_all', function(options){
+
     return Btcc.find({}, options);
 });
 
