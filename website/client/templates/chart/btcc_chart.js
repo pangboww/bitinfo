@@ -84,13 +84,11 @@ function builtArea() {
         }]
     });
 }
-function getBtccData() {
 
-}
 
 /*
  * Call the function to built the chart when the template is rendered
  */
 Template.btccChart.rendered = function() {
     builtArea();
-}
+};
