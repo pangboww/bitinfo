@@ -17,15 +17,15 @@ class BtccSpider(scrapy.Spider):
 
         item = BitinfoItem()
         item["market"] = "btcc"
-        item["date"] = jsonresponse["ticker"]["date"]
-        item["high"] = jsonresponse["ticker"]["high"]
-        item["low"] = jsonresponse["ticker"]["low"]
-        item["buy"] = jsonresponse["ticker"]["buy"]
-        item["sell"] = jsonresponse["ticker"]["sell"]
-        item["last"] = jsonresponse["ticker"]["last"]
-        item["vol"] = jsonresponse["ticker"]["vol"]
-        item["vwap"] = jsonresponse["ticker"]["vwap"]
-        item["prev_close"] = jsonresponse["ticker"]["prev_close"]
-        item["open"] = jsonresponse["ticker"]["open"]
+        item["time"] = int(jsonresponse["ticker"]["date"]) / 60 * 60
+        item["high"] = float(jsonresponse["ticker"]["high"])
+        item["low"] = float(jsonresponse["ticker"]["low"])
+        item["buy"] = float(jsonresponse["ticker"]["buy"])
+        item["sell"] = float(jsonresponse["ticker"]["sell"])
+        item["last"] = float(jsonresponse["ticker"]["last"])
+        item["vol"] = float(jsonresponse["ticker"]["vol"])
+        item["vwap"] = float(jsonresponse["ticker"]["vwap"])
+        item["prev_close"] = float(jsonresponse["ticker"]["prev_close"])
+        item["open"] = float(jsonresponse["ticker"]["open"])
         yield item
 

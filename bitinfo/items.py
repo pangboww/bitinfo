@@ -10,7 +10,7 @@ from scrapy.item import Item, Field
 
 class BitinfoItem(scrapy.Item):
     market = Field()
-    date = Field()
+    time = Field()
     high = Field()
     low = Field()
     buy = Field()

@@ -14,11 +14,8 @@ from scrapy import log
 
 class BitinfoPipeline(object):
     def __init__(self):
-        uri = "mongodb://pangboww:pb3133962@ds061354.mongolab.com:61354/bitinfo"
         client = MongoClient(settings['MONGODB_URI'])
         self.db = client[settings['MONGODB_DB']]
-        
-
 
     def process_item(self, item, spider):
         valid = True
@@ -27,8 +24,20 @@ class BitinfoPipeline(object):
             raise DropItem("Missing {0}!".format(item))
 
         if item["market"] == "btcc":
+            self.db[settings['MONGODB_COLLECTION_SELL']].update_one({"time": item["time"]},
+                {
+                    "$set": {"btcc": item["sell"]}
+                },
+                True)
+
             self.collection = self.db[settings['MONGODB_COLLECTION_BTCC']]
         elif item["market"] == "huobi":
+            self.db[settings['MONGODB_COLLECTION_SELL']].update_one({"time": item["time"]},
+                {
+                    "$set": {"huobi": item["sell"]}
+                },
+                True)
+
             self.collection = self.db[settings['MONGODB_COLLECTION_HUOBI']]
         else:
             valid = False
@@ -38,4 +47,8 @@ class BitinfoPipeline(object):
             self.collection.insert(dict(item))
             log.msg("New data added to database!",
                     level=log.DEBUG, spider=spider)
+        else:
+            log.msg("Unvalid data!",
+                    level=log.DEBUG, spider=spider)
+
         return item

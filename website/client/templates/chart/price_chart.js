@@ -59,7 +59,7 @@ function builtArea() {
 
         series: [{
             name: 'BTCC',
-            data: []
+            data: Template.currentData().data
         }, {
             name: 'Huobi',
             data: []
@@ -71,7 +71,7 @@ function builtArea() {
 /*
  * Call the function to built the chart when the template is rendered
  */
-Template.day.rendered = function() {
-    console.log(Template.currentData().btccData);
+Template.priceChart.rendered = function() {
+    console.log(Template.currentData().data);
     builtArea();
 };

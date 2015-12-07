@@ -17,14 +17,12 @@ class HuobiSpider(scrapy.Spider):
 
         item = BitinfoItem()
         item["market"] = "huobi"
-        item["date"] = jsonresponse["time"]
-        item["high"] = jsonresponse["ticker"]["high"]
-        item["low"] = jsonresponse["ticker"]["low"]
-        item["buy"] = jsonresponse["ticker"]["buy"]
-        item["sell"] = jsonresponse["ticker"]["sell"]
-        item["last"] = jsonresponse["ticker"]["last"]
-        item["vol"] = jsonresponse["ticker"]["vol"]
-        item["vwap"] = ""
-        item["prev_close"] = ""
-        item["open"] = jsonresponse["ticker"]["open"]
+        item["time"] = int(jsonresponse["time"]) / 60 * 60
+        item["high"] = float(jsonresponse["ticker"]["high"])
+        item["low"] = float(jsonresponse["ticker"]["low"])
+        item["buy"] = float(jsonresponse["ticker"]["buy"])
+        item["sell"] = float(jsonresponse["ticker"]["sell"])
+        item["last"] = float(jsonresponse["ticker"]["last"])
+        item["vol"] = float(jsonresponse["ticker"]["vol"])
+        item["open"] = float(jsonresponse["ticker"]["open"])
         yield item
