@@ -18,9 +18,9 @@ ITEM_PIPELINES = ['bitinfo.pipelines.BitinfoPipeline', ]
 
 MONGODB_URI = "mongodb://localtest:localtest@ds061354.mongolab.com:61354/bitinfo"
 MONGODB_DB = "bitinfo"
-MONGODB_COLLECTION_BTCC = "btcc_test"
-MONGODB_COLLECTION_HUOBI = "huobi_test"
-MONGODB_COLLECTION_SELL = "sell_test"
+MONGODB_COLLECTION_BTCC = "btcc"
+MONGODB_COLLECTION_HUOBI = "huobi"
+MONGODB_COLLECTION_SELL = "sell"
 
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
