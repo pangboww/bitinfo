@@ -40,3 +40,8 @@ Meteor.publish('huobi_week', function(options){
     options.limit = 60 * 24 * 7;
     return Huobi.find({}, options);
 });
+
+Meteor.publish('sell', function(options){
+    options.limit = 60;
+    return Sell.find({}, options);
+});

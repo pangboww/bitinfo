@@ -1,70 +1,40 @@
 /**
  * Created by pangboww on 05/12/15.
  */
-function builtArea() {
 
-    $('#container-area').highcharts({
+function setChart() {
+    Chart.defaults.global.responsive = true;
+}
 
-        chart: {
-            type: 'spline'
-        },
-
-        title: {
-            text: 'BTCC and Huobi Selling Price'
-        },
-
-        credits: {
-            enabled: false
-        },
-
-        xAxis: {
-            allowDecimals: false,
-            labels: {
-                formatter: function () {
-                    return this.value; // clean, unformatted number for year
-                }
-            }
-        },
-
-        yAxis: {
-            title: {
-                text: 'Price: RMB'
+function drawChart(){
+    var data = {
+        labels : Btcc.find({"time":1}),
+        datasets : [
+            {
+                label: "BTCC",
+                fillColor : "rgba(220,220,220,0.5)",
+                strokeColor : "rgba(220,220,220,1)",
+                pointColor : "rgba(220,220,220,1)",
+                pointStrokeColor : "#fff",
+                data : Btcc.find({"sell":1})
             },
-            labels: {
-                formatter: function () {
-                    return this.value / 1000 + 'k';
-                }
+            {
+                label: "Huobi",
+                fillColor: "rgba(151,187,205,0.5)",
+                strokeColor: "rgba(151,187,205,0.8)",
+                highlightFill: "rgba(151,187,205,0.75)",
+                highlightStroke: "rgba(151,187,205,1)",
+                data: Btcc.find({"sell":1})
             }
-        },
+        ]
+    };
 
-        tooltip: {
-            pointFormat: '{series.name} produced <b>{point.y:,.0f}</b><br/>warheads in {point.x}'
-        },
+    //Get context with jQuery - using jQuery's .get() method.
+    var ctx = $("#myChart").get(0).getContext("2d");
+    //This will get the first returned node in the jQuery collection.
+    var myNewChart = new Chart(ctx);
 
-        plotOptions: {
-            area: {
-                pointStart: 1940,
-                marker: {
-                    enabled: false,
-                    symbol: 'circle',
-                    radius: 2,
-                    states: {
-                        hover: {
-                            enabled: true
-                        }
-                    }
-                }
-            }
-        },
-
-        series: [{
-            name: 'BTCC',
-            data: []
-        }, {
-            name: 'Huobi',
-            data: []
-        }]
-    });
+    new Chart(ctx).Line(data);
 }
 
 
@@ -72,6 +42,6 @@ function builtArea() {
  * Call the function to built the chart when the template is rendered
  */
 Template.day.rendered = function() {
-    console.log(Template.currentData().btccData);
-    builtArea();
+    setChart();
+    Tracker.autorun(drawChart());
 };
