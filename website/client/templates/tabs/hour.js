@@ -2,85 +2,114 @@
  * Created by pangboww on 05/12/15.
  */
 
-/*
- * Call the function to built the chart when the template is rendered
- */
-function setChart() {
-    Chart.defaults.global.responsive = true;
-}
+function processData(n) {
+    n = n !== undefined ?  n : 0;
 
-function processData() {
-    var data = Sell.find({}).fetch();
+    var options = {};
+    options.sort = {time: 1};
 
-    var time = data.map(function(obj) {
-        return moment(obj.time * 1000).format('hh:mm');
-    });
 
-    time.reverse();
-    time.pop();
+    if (Sell.findOne({}) == undefined){
+        return {
+            btcc: [],
+            huobi: []
+        };
+    }
+    var end = Sell.findOne({}).time - n * 60 * 60;
+    var begin = end - 60 * 60;
+
+    var data = Sell.find({time: {$gte: begin, $lt:end}}, options).fetch();
+    console.log(data);
 
     var btcc = data.map(function(obj) {
-       return obj.btcc;
+        return [obj.time*1000, obj.btcc];
     });
-    btcc.reverse();
-    btcc.pop();
 
     var huobi = data.map(function(obj) {
-        return obj.huobi;
+        return [obj.time*1000, obj.huobi];
     });
-    huobi.reverse();
-    huobi.pop();
 
     return {
-        time: time,
         btcc: btcc,
         huobi: huobi
     }
 }
 
-function drawChart(){
-    var data = {
-        labels : processData().time,
-        //labels:[1,2,3],
-        datasets : [
-            {
-            label: "My First dataset",
-            fillColor: "rgba(220,220,220,0.2)",
-            strokeColor: "rgba(220,220,220,1)",
-            pointColor: "rgba(220,220,220,1)",
-            pointStrokeColor: "#fff",
-            pointHighlightFill: "#fff",
-            pointHighlightStroke: "rgba(220,220,220,1)",
-            data: processData().huobi
+function builtArea() {
+    console.log("build");
+
+    $('#price-area').highcharts({
+
+        chart: {
+            type: 'spline'
+        },
+
+        title: {
+            text: 'BTCC and Huobi Selling Price'
+        },
+
+        credits: {
+            enabled: false
+        },
+
+        xAxis: {
+            type: 'datetime',
+            dateTimeLabelFormats: {
+                day: '%b %e',
+                week: '%b %e'
             },
-            {
-                label: "My Second dataset",
-                fillColor: "rgba(151,187,205,0.2)",
-                strokeColor: "rgba(151,187,205,1)",
-                pointColor: "rgba(151,187,205,1)",
-                pointStrokeColor: "#fff",
-                pointHighlightFill: "#fff",
-                pointHighlightStroke: "rgba(151,187,205,1)",
-                data: processData().btcc
+            title: {
+                text: 'Time'
             }
-        ]
-    };
+        },
 
-    //Get context with jQuery - using jQuery's .get() method.
-    var ctx = $("#myChart").get(0).getContext("2d");
-    //This will get the first returned node in the jQuery collection.
-    var myNewChart = new Chart(ctx);
+        yAxis: {
+            title: {
+                text: 'Price: RMB'
+            }
+        },
 
-    new Chart(ctx).Line(data);
+        tooltip: {
+            headerFormat: '<b>{series.name}</b><br>',
+            pointFormat: 'Price: {point.y:.2f}<br>Time: {point.x:%H:%M}'
+
+        },
+
+        plotOptions: {
+            area: {
+                pointStart: 0,
+                marker: {
+                    enabled: false,
+                    symbol: 'circle',
+                    radius: 2,
+                    states: {
+                        hover: {
+                            enabled: true
+                        }
+                    }
+                }
+            }
+        },
+
+        series: [{
+            name: 'BTCC',
+            data: processData().btcc
+        }, {
+            name: 'Huobi',
+            data: processData().huobi
+        }]
+    });
 }
 
-function prt() {
-    var c = Sell.find({}).count();
-    console.log(c);
-}
-
+/*
+ * Call the function to built the chart when the template is rendered
+ */
 Template.hour.rendered = function() {
-    setChart();
-    Tracker.autorun(drawChart);
-    Tracker.autorun(prt);
+    Highcharts.setOptions({
+        global: {
+            useUTC: false
+        }
+    });
+    console.log("start!");
+    Tracker.autorun(builtArea);
 };

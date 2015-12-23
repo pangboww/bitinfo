@@ -1,6 +1,7 @@
 /**
  * Created by pangboww on 05/12/15.
  */
+
 function builtArea() {
 
     $('#container-area').highcharts({
@@ -59,10 +60,10 @@ function builtArea() {
 
         series: [{
             name: 'BTCC',
-            data: Template.currentData().data
+            data: Template.parentData(1).btcc
         }, {
             name: 'Huobi',
-            data: []
+            data: Template.parentData(1).huobi
         }]
     });
 }
@@ -72,6 +73,5 @@ function builtArea() {
  * Call the function to built the chart when the template is rendered
  */
 Template.priceChart.rendered = function() {
-    console.log(Template.currentData().data);
-    builtArea();
+    Tracker.autorun(builtArea);
 };

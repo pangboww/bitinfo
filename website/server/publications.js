@@ -42,6 +42,5 @@ Meteor.publish('huobi_week', function(options){
 });
 
 Meteor.publish('sell', function(options){
-    options.limit = 60;
     return Sell.find({}, options);
 });
