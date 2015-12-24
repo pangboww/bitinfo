@@ -105,3 +105,6 @@ docs/_build/
 
 # PyBuilder
 target/
+
+#mupx
+website/mup.json
