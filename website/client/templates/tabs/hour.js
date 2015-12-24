@@ -17,7 +17,7 @@ function processData(hourBefore) {
     var begin = end - 60 * 60;
 
     var data = Sell.find({time: {$gte: begin, $lt:end}}, options).fetch();
-
+    var startt = new Date().getTime();
     var btcc = data.map(function(obj) {
         return [obj.time*1000, obj.btcc !== undefined ? obj.btcc : obj.huobi];
     });
@@ -25,7 +25,8 @@ function processData(hourBefore) {
     var huobi = data.map(function(obj) {
         return [obj.time*1000, obj.huobi !== undefined ? obj.huobi : obj.btcc];
     });
-
+    var endt = new Date().getTime();
+    console.log(endt-startt);
     return {
         btcc: btcc,
         huobi: huobi
