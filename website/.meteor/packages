@@ -22,3 +22,4 @@ twbs:bootstrap
 sacha:spin
 maazalik:highcharts
 momentjs:moment
+reactive-var
